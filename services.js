@@ -20,6 +20,7 @@ angular.module('twitterApp.services', []).factory('twitterService', function($q)
             OAuth.popup('twitter', {cache:true}, function(error, result) { //cache means to execute the callback if the tokens are already present
                 if (!error) {
                     authorizationResult = result;
+                    //provided by $q library
                     deferred.resolve();
                 } else {
                     //do something if there's an error
