@@ -1,3 +1,5 @@
+//pass in a promise to represent the eventual result of an operation
+//TL;DR for factory: you create an object, add properties to it, and then return it
 angular.module('twitterApp.services', []).factory('twitterService', function($q) {
 
     var authorizationResult = false;
@@ -9,6 +11,7 @@ angular.module('twitterApp.services', []).factory('twitterService', function($q)
             //try to create an authorization result when the page loads, this means a returning user won't have to click the twitter button again
             authorizationResult = OAuth.create('twitter');
         },
+        //when ready, return the result
         isReady: function() {
             return (authorizationResult);
         },
@@ -32,13 +35,13 @@ angular.module('twitterApp.services', []).factory('twitterService', function($q)
         getLatestTweets: function (maxId) {
             //create a deferred object using Angular's $q service
             var deferred = $q.defer();
-      			var url='/1.1/statuses/home_timeline.json';
-      			if(maxId){
-      				url+='?max_id='+maxId;
-      			}
+      		var url='/1.1/statuses/home_timeline.json';
+      		if(maxId){
+      			url+='?max_id='+maxId;
+      		}
             var promise = authorizationResult.get(url).done(function(data) { //https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline
                 //when the data is retrieved resolve the deferred object
-				        deferred.resolve(data);
+				deferred.resolve(data);
             }).fail(function(err) {
                //in case of any error we reject the promise with the error object
                 deferred.reject(err);

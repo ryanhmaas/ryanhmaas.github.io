@@ -1,15 +1,19 @@
-//inject the twitterService into the controller
+//inject the twitterService (our factory) into the controller
 app.controller('TwitterController', function($scope,$q, twitterService) {
 
-    $scope.tweets=[]; //array of tweets
+    //create array of tweets
+    $scope.tweets=[]; 
 
+    //start the twitter service
     twitterService.initialize();
 
     //using the OAuth authorization result get the latest 20 tweets from twitter for the user
     $scope.refreshTimeline = function(maxId) {
+        //use a promise
         twitterService.getLatestTweets(maxId).then(function(data) {
             $scope.tweets = $scope.tweets.concat(data);
         },function(){
+            //there is a rate limit to twitter requests
             $scope.rateLimitError = true;
         });
     }
@@ -45,7 +49,7 @@ app.controller('TwitterController', function($scope,$q, twitterService) {
     if (twitterService.isReady()) {
         $('#connectButton').hide();
         $('#getTimelineButton, #signOut').show();
-     		$scope.connectedTwitter = true;
+     	$scope.connectedTwitter = true;
         $scope.refreshTimeline();
     }
 
