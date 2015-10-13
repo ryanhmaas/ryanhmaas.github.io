@@ -1,2 +1,2 @@
-// twitterApp is dependent on ngSanitize and myApp.services module
+//twitterApp is dependent on the myApp.services module
 var app = angular.module('twitterApp', ['ngSanitize','twitterApp.services']);

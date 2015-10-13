@@ -1,5 +1,7 @@
-app.controller('TwitterController', function($scope, $q, twitterService) {
-    $scope.tweets = []; //array of tweets
+//inject the twitterService into the controller
+app.controller('TwitterController', function($scope,$q, twitterService) {
+
+    $scope.tweets=[]; //array of tweets
 
     twitterService.initialize();
 
@@ -7,7 +9,7 @@ app.controller('TwitterController', function($scope, $q, twitterService) {
     $scope.refreshTimeline = function(maxId) {
         twitterService.getLatestTweets(maxId).then(function(data) {
             $scope.tweets = $scope.tweets.concat(data);
-        }, function() {
+        },function(){
             $scope.rateLimitError = true;
         });
     }
@@ -17,14 +19,14 @@ app.controller('TwitterController', function($scope, $q, twitterService) {
         twitterService.connectTwitter().then(function() {
             if (twitterService.isReady()) {
                 //if the authorization is successful, hide the connect button and display the tweets
-                $('#connectButton').fadeOut(function() {
+                $('#connectButton').fadeOut(function(){
                     $('#getTimelineButton, #signOut').fadeIn();
                     $scope.refreshTimeline();
-                    $scope.connectedTwitter = true;
+					          $scope.connectedTwitter = true;
                 });
             } else {
 
-            }
+			         }
         });
     }
 
@@ -32,19 +34,19 @@ app.controller('TwitterController', function($scope, $q, twitterService) {
     $scope.signOut = function() {
         twitterService.clearCache();
         $scope.tweets.length = 0;
-        $('#getTimelineButton, #signOut').fadeOut(function() {
+        $('#getTimelineButton, #signOut').fadeOut(function(){
             $('#connectButton').fadeIn();
-            $scope.$apply(function() {
-                $scope.connectedTwitter = false
-            })
+			$scope.$apply(function(){$scope.connectedTwitter=false})
         });
+        $scope.rateLimitError = false;    
     }
 
     //if the user is a returning user, hide the sign in button and display the tweets
     if (twitterService.isReady()) {
         $('#connectButton').hide();
         $('#getTimelineButton, #signOut').show();
-        $scope.connectedTwitter = true;
+     		$scope.connectedTwitter = true;
         $scope.refreshTimeline();
     }
+
 });
